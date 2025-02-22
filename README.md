@@ -1,5 +1,5 @@
 # What is this?
-This is the source code for the Daggerfall Unity game mod called "UI Backdrop", which add backdrops to the game UI.
+This is the source code for the Daggerfall Unity game mod called "UI Backdrop", which add backdrop to the game UI.
 
 # Features
 * Can select backdrop color  
