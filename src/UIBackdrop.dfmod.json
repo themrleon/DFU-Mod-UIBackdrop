@@ -1,0 +1,13 @@
+{
+    "ModTitle": "UI Backdrop",
+    "ModVersion": "1.0",
+    "ModAuthor": "themrleon",
+    "DFUnity_Version": "1.1.1",
+    "ModDescription": "Add backdrop to the user interface",
+    "GUID": "eefa15dc-2904-4d0d-8935-e9bba3df8f1f",
+    "Files": [
+        "Assets/Game/Mods/UIBackdrop/UIBackdrop.cs",
+        "Assets/Game/Mods/UIBackdrop/UIBackdrop.dfmod.json",
+        "Assets/Game/Mods/UIBackdrop/modsettings.json"
+    ]
+}
