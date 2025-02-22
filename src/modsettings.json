@@ -1,0 +1,31 @@
+{
+  "Version": "1.00",
+  "Sections": [
+    {
+      "Name": "Settings",
+      "IsAdvanced": false,
+      "Keys": [
+        {
+          "Value": true,
+          "Name": "EnableRestWindowBackdrop",
+          "Description": "Add backdrop to the Rest window too",
+          "$version": "v1",
+          "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ToggleKey"
+        },
+        {
+          "Value": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 127
+          },
+          "Name": "BackdropColor",
+          "Description": "Backdrop color",
+          "$version": "v1",
+          "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.ColorKey"
+        }
+      ],
+      "$version": "v1"
+    }
+  ]
+}
