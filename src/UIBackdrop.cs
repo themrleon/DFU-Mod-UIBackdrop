@@ -24,7 +24,8 @@ namespace UIBackdropMod
     public class UIBackdropMod : MonoBehaviour
     {
         public static Mod Mod;
-        private static Panel backdropPanel;
+        private static Panel backdropPanel1;
+        private static Panel backdropPanel2;
         private Type[] skipWindowTypes = {
             typeof(DaggerfallWorkshop.Game.UserInterfaceWindows.DaggerfallVidPlayerWindow),
             typeof(DaggerfallWorkshop.Game.UserInterfaceWindows.DaggerfallStartWindow),
@@ -81,8 +82,19 @@ namespace UIBackdropMod
 
             // Remove top window's components
             (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Clear();
-            // Add backdrop as the first top window's component
-            (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel);
+
+            // Add backdrop to the top window's component, but and in case there are 2 windows stacked we have to disable the previous backdrop so they don't mix/stack up!
+            // you can press 'i' twice in game to test this scenario
+            if ((sender as UserInterfaceManager).WindowCount > 1)
+            {
+                backdropPanel1.Enabled = false;
+                (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel2);
+            }
+            else
+            {
+                backdropPanel1.Enabled = true;
+                (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel1);
+            }
 
             // Restore top window's components
             for (int i = 1; i < ComponentsCount; i++)
@@ -95,7 +107,13 @@ namespace UIBackdropMod
         {
             if (modSettings != null)
             {
-                backdropPanel = new Panel
+                backdropPanel1 = new Panel
+                {
+                    BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
+                    Name = "UIBackdropMod.BackdropPanel",
+                    Size = new Vector2(Screen.width, Screen.height)
+                };
+                backdropPanel2 = new Panel
                 {
                     BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
                     Name = "UIBackdropMod.BackdropPanel",
