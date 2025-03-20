@@ -22,4 +22,4 @@ Changing settings during gameplay:
 ![demo](https://github.com/themrleon/DFU-MOD-UIBackdrop/blob/3164fd2c74c1953b4508e654dd5424e0d666e889/images/demo.gif)
 
 # How to use this mod?
-Copy `"ui backdrop.dfmod"` to your game mods folder `".../DaggerfallUnity_Data/StreamingAssets/Mods/"`
+Copy `"UIBackdrop.dfmod"` to your game mods folder `".../DaggerfallUnity_Data/StreamingAssets/Mods/"`
