@@ -26,6 +26,8 @@ namespace UIBackdropMod
         public static Mod Mod;
         private static Panel backdropPanel1;
         private static Panel backdropPanel2;
+        private static Panel backdropPanel3;
+
         private Type[] skipWindowTypes = {
             typeof(DaggerfallWorkshop.Game.UserInterfaceWindows.DaggerfallVidPlayerWindow),
             typeof(DaggerfallWorkshop.Game.UserInterfaceWindows.DaggerfallStartWindow),
@@ -83,14 +85,22 @@ namespace UIBackdropMod
             // Remove top window's components
             (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Clear();
 
-            // Add backdrop to the top window's component, but and in case there are 2 windows stacked we have to disable the previous backdrop so they don't mix/stack up!
-            // you can press 'i' twice in game to test this scenario
-            if ((sender as UserInterfaceManager).WindowCount > 1)
+            // Add backdrop to the top window's component, but disabling the previous windows backdrop up to two in case there were any
+            // Press ESC -> mod settings -> UI Backdrop -> select color to test this scenario
+            if ((sender as UserInterfaceManager).WindowCount == 3)
             {
+                backdropPanel1.Enabled = false;
+                backdropPanel2.Enabled = false;
+                (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel3);
+            }
+            // Press 'i' twice in game to test this scenario
+            else if ((sender as UserInterfaceManager).WindowCount == 2)
+            {
+                backdropPanel2.Enabled = true;
                 backdropPanel1.Enabled = false;
                 (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel2);
             }
-            else
+            else if ((sender as UserInterfaceManager).WindowCount == 1)
             {
                 backdropPanel1.Enabled = true;
                 (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel1);
@@ -107,6 +117,7 @@ namespace UIBackdropMod
         {
             if (modSettings != null)
             {
+                // Create the panels that will be re-used by up to three windows
                 backdropPanel1 = new Panel
                 {
                     BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
@@ -114,6 +125,12 @@ namespace UIBackdropMod
                     Size = new Vector2(Screen.width, Screen.height)
                 };
                 backdropPanel2 = new Panel
+                {
+                    BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
+                    Name = "UIBackdropMod.BackdropPanel",
+                    Size = new Vector2(Screen.width, Screen.height)
+                };
+                backdropPanel3 = new Panel
                 {
                     BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
                     Name = "UIBackdropMod.BackdropPanel",
