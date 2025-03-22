@@ -5,6 +5,7 @@ using DaggerfallWorkshop.Game.UserInterfaceWindows;
 using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Game.UserInterface;
 using System;
+using System.Collections.Generic;
 
 namespace UIBackdropMod
 {
@@ -24,9 +25,7 @@ namespace UIBackdropMod
     public class UIBackdropMod : MonoBehaviour
     {
         public static Mod Mod;
-        private static Panel backdropPanel1;
-        private static Panel backdropPanel2;
-        private static Panel backdropPanel3;
+        private static List<Panel> backdropPanels = new List<Panel>();
 
         private Type[] skipWindowTypes = {
             typeof(DaggerfallWorkshop.Game.UserInterfaceWindows.DaggerfallVidPlayerWindow),
@@ -57,6 +56,17 @@ namespace UIBackdropMod
 
         private void Start()
         {
+            for (int i = 0; i < 10; i++)
+            {
+                backdropPanels.Add(
+                    new Panel
+                    {
+                        BackgroundColor = Color.black,
+                        Name = "UIBackdropMod.BackdropPanel",
+                        Size = new Vector2(Screen.width, Screen.height)
+                    }
+                );
+            }
             Mod.LoadSettings();
             DaggerfallUI.Instance.UserInterfaceManager.OnWindowChange += OnWindowChangeEvent;
         }
@@ -85,26 +95,15 @@ namespace UIBackdropMod
             // Remove top window's components
             (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Clear();
 
-            // Add backdrop to the top window's component, but disabling the previous windows backdrop up to two in case there were any
-            // Press ESC -> mod settings -> UI Backdrop -> select color to test this scenario
-            if ((sender as UserInterfaceManager).WindowCount == 3)
+            // Start new game and go with custom class to see up to 5 ou even 6 stacked up window list!
+            // Disable all backdrops keeping only the one that will be used
+            int windowCount = (sender as UserInterfaceManager).WindowCount;
+            foreach (Panel panel in backdropPanels)
             {
-                backdropPanel1.Enabled = false;
-                backdropPanel2.Enabled = false;
-                (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel3);
+                panel.Enabled = false;
             }
-            // Press 'i' twice in game to test this scenario
-            else if ((sender as UserInterfaceManager).WindowCount == 2)
-            {
-                backdropPanel2.Enabled = true;
-                backdropPanel1.Enabled = false;
-                (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel2);
-            }
-            else if ((sender as UserInterfaceManager).WindowCount == 1)
-            {
-                backdropPanel1.Enabled = true;
-                (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanel1);
-            }
+            backdropPanels[windowCount - 1].Enabled = true;
+            (sender as UserInterfaceManager).TopWindow.ParentPanel.Components.Add(backdropPanels[windowCount - 1]);
 
             // Restore top window's components
             for (int i = 1; i < ComponentsCount; i++)
@@ -117,25 +116,10 @@ namespace UIBackdropMod
         {
             if (modSettings != null)
             {
-                // Create the panels that will be re-used by up to three windows
-                backdropPanel1 = new Panel
+                foreach (Panel panel in backdropPanels)
                 {
-                    BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
-                    Name = "UIBackdropMod.BackdropPanel",
-                    Size = new Vector2(Screen.width, Screen.height)
-                };
-                backdropPanel2 = new Panel
-                {
-                    BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
-                    Name = "UIBackdropMod.BackdropPanel",
-                    Size = new Vector2(Screen.width, Screen.height)
-                };
-                backdropPanel3 = new Panel
-                {
-                    BackgroundColor = modSettings.GetColor("Settings", "BackdropColor"),
-                    Name = "UIBackdropMod.BackdropPanel",
-                    Size = new Vector2(Screen.width, Screen.height)
-                };
+                    panel.BackgroundColor = modSettings.GetColor("Settings", "BackdropColor");
+                }
                 UIWindowFactory.RegisterCustomUIWindow(UIWindowType.Rest, modSettings.GetValue<bool>("Settings", "EnableRestWindowBackdrop") ? typeof(DaggerfallRestWindowBackdrop) : typeof(DaggerfallRestWindow));
             }
         }
